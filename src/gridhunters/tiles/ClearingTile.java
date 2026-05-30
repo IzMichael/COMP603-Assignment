@@ -67,4 +67,9 @@ public class ClearingTile extends Tile {
     public Item interact() {
         return null;
     }
+    
+    @Override
+    public String getDescription() {
+        return "(" + this.x + ", " + this.y + ") You find yourself in an empty clearing...";
+    }
 }

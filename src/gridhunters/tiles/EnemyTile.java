@@ -269,4 +269,15 @@ public class EnemyTile extends Tile {
 
         return null;
     }
+    
+    @Override
+    public String getDescription() {
+        if (this.isDefeated) {
+            return "The enemy has already been defeated. You attack the remains just to be certain.";
+        }
+        if (isBoss == true) {
+            return "(" + this.x + ", " + this.y + ") Your instincts scream for you to turn back. A legendary presence is felt nearby...";
+        }
+        return "(" + this.x + ", " + this.y + ") You feel an forboding presence in the area... \nA great and powerful enemy is near!";
+    }
 }

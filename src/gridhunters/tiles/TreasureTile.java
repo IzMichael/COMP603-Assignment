@@ -108,4 +108,9 @@ public class TreasureTile extends Tile {
         }
         return null;
     }
+    
+    @Override
+    public String getDescription() {
+        return "(" + this.x + ", " + this.y + ") You come across a treasure chest...";
+    }
 }

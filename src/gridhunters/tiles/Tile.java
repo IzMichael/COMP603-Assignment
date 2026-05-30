@@ -38,16 +38,33 @@ public abstract class Tile implements Serializable {
         return this.visited;
     }
     
-    Tile getToNorth() {
+    public Tile getToNorth() {
         return game.map.getTile(x, y + 1);
     }
-    Tile getToEast() {
+    public Tile getToEast() {
         return game.map.getTile(x + 1, y);
     }
-    Tile getToSouth() {
+    public Tile getToSouth() {
         return game.map.getTile(x, y - 1);
     }
-    Tile getToWest() {
+    public Tile getToWest() {
         return game.map.getTile(x - 1, y);
+    }
+    
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+    
+    public void exploreVisual() {
+        this.visited = true;
+        this.game.player.setPosition(this.x, this.y);
+    }
+    
+    public String getDescription() {
+        return "(" + this.x + ", " + this.y + ") You traveled into an unknown sector.";
     }
 }
