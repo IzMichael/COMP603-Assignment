@@ -58,7 +58,7 @@ public class GridHunters {
         Game game = new Game(save);
 
         SwingUtilities.invokeLater(() -> {
-            GameGUI gui = new GameGUI(gameSession.player, gameSession.map);
+            GameGUI gui = new GameGUI(game.player, game.map);
             gui.setVisible(true);
         });
     }

@@ -41,7 +41,7 @@ public final class Game implements Serializable {
         }
         
         System.out.println("");
-        this.map.getTile(this.player.x, this.player.y).explore();
+        this.map.getTile(this.player.x, this.player.y).exploreVisual();
         
         this.save();
     }
