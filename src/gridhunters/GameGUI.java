@@ -9,6 +9,7 @@ import gridhunters.tiles.Tile;
 public class GameGUI extends JFrame {
     Player player;
     Map map;
+    Game game;
     JLabel labelHP;
     JLabel labelClass;
     JLabel labelHelmet;
@@ -20,17 +21,18 @@ public class GameGUI extends JFrame {
     JTextArea textLog;
     JPanel panelMap;
 
-    public GameGUI(Player player, Map map) {
+    public GameGUI(Game game, Player player, Map map) {
+        this.game = game;
         this.player = player;
         this.map = map;
 
         setTitle("Grid Hunters");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(1280, 808);
         setLocationRelativeTo(null);
         getContentPane().setBackground(Color.BLACK);
         setLayout(new BorderLayout(10, 10));
-
+        
         JPanel panelSidebar = new JPanel();
         panelSidebar.setLayout(new BoxLayout(panelSidebar, BoxLayout.Y_AXIS));
         panelSidebar.setBackground(new Color(25, 25, 25));
@@ -157,6 +159,22 @@ public class GameGUI extends JFrame {
         
         updateHPAndInventory();
         logMessage("Cross tiles via WASD.");
+        
+        addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {
+            try {
+                System.out.println("Auto-saving before exiting.");
+                game.save();
+            } catch (Exception ex) {
+                System.err.println("Failed to auto-save game: " + ex.getMessage());
+                ex.printStackTrace();
+            } finally {
+                dispose();
+                System.exit(0);
+            }
+        }
+        });
     }
 
     public void refreshVisualMap() {
@@ -256,26 +274,38 @@ public class GameGUI extends JFrame {
             return;
         }
 
-        Tile currentTile = map.getTile(player.getX(), player.getY());
-        Tile targetTile = null;
+        int currentX = player.getX();
+        int currentY = player.getY();
+
+        int targetX = currentX;
+        int targetY = currentY;
 
         switch (keyCode) {
-            case KeyEvent.VK_W -> targetTile = currentTile.getToNorth();
-            case KeyEvent.VK_S -> targetTile = currentTile.getToSouth();
-            case KeyEvent.VK_D -> targetTile = currentTile.getToEast();
-            case KeyEvent.VK_A -> targetTile = currentTile.getToWest();
+            case KeyEvent.VK_W -> targetY = currentY + 1;
+            case KeyEvent.VK_S -> targetY = currentY - 1;
+            case KeyEvent.VK_D -> targetX = currentX + 1;
+            case KeyEvent.VK_A -> targetX = currentX - 1;
+            default -> {
+                return;
+            }
         }
 
+        Tile targetTile = map.getTile(targetX, targetY);
+
         if (targetTile != null) {
+            player.x = targetX; 
+            player.y = targetY; 
+
             targetTile.exploreVisual(); 
-            
+
             logMessage(targetTile.getDescription());
             logMessage("");
-            
+
+            refreshVisualMap(); 
             updateHPAndInventory(); 
         }
     }
-
+    
     public void logMessage(String message) {
         textLog.append("\n" + message);
         textLog.setCaretPosition(textLog.getDocument().getLength());
