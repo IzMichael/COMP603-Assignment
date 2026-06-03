@@ -1,5 +1,7 @@
-package gridhunters;
+package gridhunters.ui;
 
+import gridhunters.io.SaveFile;
+import gridhunters.io.SaveManager;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

@@ -1,9 +1,9 @@
 package gridhunters.tiles;
 
 import java.util.ArrayList;
-import gridhunters.Item;
+import gridhunters.items.Item;
 import gridhunters.Game;
-import gridhunters.GameGUI;
+import gridhunters.ui.GameGUI;
 
 public class TreasureTile extends Tile {
     ArrayList<Item> treasureChest = new ArrayList<>();
@@ -33,6 +33,7 @@ public class TreasureTile extends Tile {
         return "(" + this.x + ", " + this.y + ") You come across a treasure chest...";
     }
     
+    @Override
     public void playerArrive(GameGUI gui) {
         gui.setTreasureTile(this);
         gui.logMessage("Press [R] to rummage through the treasure chest.");

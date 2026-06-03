@@ -2,19 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gridhunters;
+package gridhunters.items;
 
 /**
  *
  * @author LD Mao
  */
+import gridhunters.Player;
 import java.io.Serializable;
 import java.util.Random;
 
 public class Item implements Serializable {
     public enum Rarity {
         LEATHER(1, "Leather"), COPPER(2, "Copper"), IRON(3, "Iron"), DIAMOND(4, "Diamond");
-        int bonus;
+        public int bonus;
         String name;
 
         Rarity(int bonus, String name) {
@@ -44,8 +45,8 @@ public class Item implements Serializable {
 
     protected String name;
     Rarity rarity;
-    Equipment equip;
-    protected int statBonus;
+    public Equipment equip;
+    public int statBonus;
 
     public Item() {
         Random r = new Random();

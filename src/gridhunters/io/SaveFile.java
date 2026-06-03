@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gridhunters;
+package gridhunters.io;
 
+import gridhunters.Player;
+import gridhunters.tiles.Map;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,15 +20,15 @@ import java.util.Base64;
  */
 public class SaveFile implements Serializable {
 
-    String name;
+    public String name;
     Map map;
     Player player;
 
-    public SaveFile(String serialized) throws IOException, ClassNotFoundException {
+    public SaveFile(String profileName, String serialized) throws IOException, ClassNotFoundException {
         String[] parts = serialized.split(";-;");
-        this.name = parts[0];
-        this.map = (Map) SaveFile.deserialize(parts[1]);
-        this.player = (Player) SaveFile.deserialize(parts[2]);
+        this.name = profileName;
+        this.map = (Map) SaveFile.deserialize(parts[0]);
+        this.player = (Player) SaveFile.deserialize(parts[1]);
     }
 
     public SaveFile(String name, Map map, Player player) {
@@ -47,7 +49,7 @@ public class SaveFile implements Serializable {
         } catch (IOException ex) {
             System.getLogger(SaveFile.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-        return this.name + ";-;" + mapSerial + ";-;" + playerSerial;
+        return mapSerial + ";-;" + playerSerial;
     }
 
     public String getName() {

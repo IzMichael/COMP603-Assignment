@@ -1,4 +1,4 @@
-package gridhunters;
+package gridhunters.io;
 
 import java.io.File;
 import java.io.FileReader;
@@ -11,6 +11,7 @@ import java.util.HashMap;
  * @author Michael Martin
  */
 public class SaveManager {
+    private static SaveManager instance;
     HashMap<String, SaveFile> saves = new HashMap<>();
     final String directory = "./resources/";
     final String file = "savedata.txt";
@@ -25,17 +26,41 @@ public class SaveManager {
         this.saves = this.restore();
     }
     
+    public static synchronized SaveManager getInstance() throws ClassNotFoundException, IOException {
+        if (instance == null) {
+            instance = new SaveManager();
+        }
+        return instance;
+    }
+    
     private HashMap<String, SaveFile> restore() throws IOException, ClassNotFoundException {
         FileReader fileReader = new FileReader(this.path);
         HashMap<String, SaveFile> savemap = new HashMap<>();
-        
+
         String contents = fileReader.readAllAsString();
-        String lines[] = contents.split("\n");
+        String lines[] = contents.split("\\r?\\n");
+
         for (String line : lines) {
-            String[] params = line.split(" ");
-            if (params.length == 2) savemap.put(params[0], new SaveFile(params[1]));
+            line = line.trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+
+            int firstSpaceIdx = line.indexOf(" ");
+            if (firstSpaceIdx == -1) {
+                continue;
+            }
+
+            String saveName = line.substring(0, firstSpaceIdx);
+            String base64Data = line.substring(firstSpaceIdx + 1);
+
+            try {
+                savemap.put(saveName, new SaveFile(saveName, base64Data)); 
+            } catch (Exception e) {
+                System.err.println("Failed to parse save profile [" + saveName + "]: " + e.getMessage());
+            }
         }        
-        
+
         return savemap;
     }
     

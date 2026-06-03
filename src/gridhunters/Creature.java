@@ -13,9 +13,9 @@ import java.io.Serializable;
  * @author Michael Martin, LD Mao
  */
 public abstract class Creature implements Serializable {
-    int x;
-    int y;
-    int maxHealth;
+    public int x;
+    public int y;
+    public int maxHealth;
     public int health;
     ArrayList<StatusEffect> activeEffects = new ArrayList<>();
 
