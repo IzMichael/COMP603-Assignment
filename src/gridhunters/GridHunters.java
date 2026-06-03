@@ -1,5 +1,7 @@
 package gridhunters;
 
+import gridhunters.ui.GameGUI;
+import gridhunters.ui.SaveGUI;
 import java.io.IOException;
 import javax.swing.SwingUtilities;
 

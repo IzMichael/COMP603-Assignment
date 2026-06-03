@@ -1,9 +1,14 @@
 package gridhunters;
 
+import gridhunters.io.SaveFile;
+import gridhunters.patterns.GameObserver;
+import gridhunters.tiles.Map;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,6 +20,8 @@ public final class Game implements Serializable {
     public Player player;
     public SaveFile save;
     private transient SaveDAO saveDAO;
+
+    private transient List<GameObserver> observers = new ArrayList<>();
 
     public Game(SaveFile save) throws IOException, ClassNotFoundException {
         this.saveDAO = new SaveDAO();
@@ -34,10 +41,41 @@ public final class Game implements Serializable {
             this.save.setPlayer(this.player);
         }
 
+        if (this.player != null) {
+            this.player.game = this;
+        }
+
         System.out.println("");
         this.map.getTile(this.player.x, this.player.y).exploreVisual();
 
         this.save();
+    }
+
+    public void registerObserver(GameObserver observer) {
+        if (observers == null) {
+            observers = new ArrayList<>();
+        }
+        if (observer != null && !observers.contains(observer)) {
+            observers.add(observer);
+        }
+    }
+
+    public void notifyStatsChanged(int health, int maxHealth, String logText) {
+        if (observers == null) return;
+        for (GameObserver obs : observers) {
+            if (obs != null) {
+                obs.onPlayerStatsChanged(health, maxHealth, logText);
+            }
+        }
+    }
+
+    public void notifyCombatTriggered(Enemy enemy) {
+    if (observers == null) return;
+        for (GameObserver obs : observers) {
+            if (obs != null) {
+                obs.onCombatTriggered(enemy);
+            }
+        }
     }
 
     public void save() throws IOException, ClassNotFoundException {
@@ -67,7 +105,9 @@ public final class Game implements Serializable {
         JLabel lblStats = new JLabel(statSheet);
         panel.add(lblStats, BorderLayout.CENTER);
 
-        String[] options = { "Warrior", "Mage", "Tank", "Rogue", "Cleric" };
+        String[] options = {"Warrior", "Mage", "Tank", "Rogue", "Cleric"};
+
+        Player newPlayer;
 
         while (true) {
             int selection = JOptionPane.showOptionDialog(
@@ -83,45 +123,32 @@ public final class Game implements Serializable {
 
             switch (selection) {
                 case 0 -> {
-                    return new Player(this, "Warrior", 1, 1.25, 0.25, 1, 1);
+                    newPlayer = new Player(this, "Warrior", 1, 1.25, 0.25, 1, 1);
                 }
                 case 1 -> {
-                    return new Player(this, "Mage", 1, 0.25, 1.25, 1, 1);
+                    newPlayer = new Player(this, "Mage", 1, 0.25, 1.25, 1, 1);
                 }
                 case 2 -> {
-                    return new Player(this, "Tank", 1.25, 1, 0.25, 1.25, 1);
+                    newPlayer = new Player(this, "Tank", 1.25, 1, 0.25, 1.25, 1);
                 }
                 case 3 -> {
-                    return new Player(
-                        this,
-                        "Rogue",
-                        0.25,
-                        1.25,
-                        0.25,
-                        0.25,
-                        1.25
-                    );
+                    newPlayer = new Player(this, "Rogue", 0.25, 1.25, 0.25, 0.25, 1.25);
                 }
                 case 4 -> {
-                    return new Player(
-                        this,
-                        "Cleric",
-                        1.25,
-                        0.25,
-                        0.25,
-                        1,
-                        0.25
-                    );
+                    newPlayer = new Player(this, "Cleric", 1.25, 0.25, 0.25, 1, 0.25);
                 }
                 default -> {
-                    JOptionPane.showMessageDialog(
-                        null,
-                        "Before you start playing, you must choose a class.",
-                        "Selection Required",
-                        JOptionPane.WARNING_MESSAGE
-                    );
+                    JOptionPane.showMessageDialog(null, "Before you start playing, you must choose a class.", "Selection Required", JOptionPane.WARNING_MESSAGE);
+                    continue;
                 }
             }
+
+            if (this.save != null) {
+                newPlayer.setName(this.save.getName());
+            } else {
+                newPlayer.setName("Unknown Hunter");
+            }
+            return newPlayer;
         }
     }
 }

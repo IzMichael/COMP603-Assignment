@@ -1,7 +1,7 @@
 package gridhunters.tiles;
 
 import gridhunters.Game;
-import gridhunters.Item;
+import gridhunters.items.Item;
 
 public class ClearingTile extends Tile {
 

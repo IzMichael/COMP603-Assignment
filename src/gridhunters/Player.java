@@ -4,11 +4,10 @@
  */
 package gridhunters;
 
-import gridhunters.Item.Equipment;
+import gridhunters.items.Item;
+import gridhunters.items.Item.Equipment;
 import java.util.ArrayList;
-import java.util.Random;
 import gridhunters.items.Artefact;
-import java.util.Scanner;
 
 /**
  *
@@ -23,11 +22,11 @@ public class Player extends Creature {
     private final String classType;
     private final int inventorySize = 5;
     public ArrayList<Item> inventory = new ArrayList(inventorySize);
-    Item helmet;
-    Item chestplate;
-    Item leggings;
-    Item boots;
-    Item hand;
+    public Item helmet;
+    public Item chestplate;
+    public Item leggings;
+    public Item boots;
+    public Item hand;
     ArrayList<Artefact> artefacts = new ArrayList<>();
 
     int meleeStrength = 5;

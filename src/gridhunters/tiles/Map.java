@@ -2,15 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gridhunters;
+package gridhunters.tiles;
 
+import gridhunters.Game;
+import gridhunters.patterns.TileFactory;
 import gridhunters.tiles.Tile;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
-import gridhunters.tiles.EnemyTile;
 import gridhunters.tiles.ClearingTile;
-import gridhunters.tiles.TreasureTile;
 import java.io.Serializable;
 
 /**
@@ -18,13 +17,16 @@ import java.io.Serializable;
  * @author Michael Martin
  */
 public class Map implements Serializable {
-
+    
+    private TileFactory tileFactory;
+    
     HashMap<String, Tile> tiles = new HashMap<>();
     transient Game game;
     int maxViewRadius = 3;
 
     public Map(Game game) {
         this.game = game;
+        this.tileFactory = new TileFactory(game);
         ClearingTile origin = new ClearingTile(this.game, 0, 0);
         setTile(0, 0, origin);
     }
@@ -74,24 +76,6 @@ public class Map implements Serializable {
     }
 
     private Tile generateTile(int x, int y) {
-        Random random = new Random();
-        int typeIndex = random.nextInt(0, 3) + 1;
-        switch (typeIndex) {
-            case 1 -> {
-                return new ClearingTile(this.game, x, y);
-            }
-            case 2 -> {
-                return new TreasureTile(this.game, x, y);
-            }
-            case 3 -> {
-                return new EnemyTile(this.game, x, y, false);
-            }
-            case 4 -> {
-                return new EnemyTile(this.game, x, y, true);
-            }
-            default -> {
-                return this.generateTile(x, y);
-            }
-        }
+        return this.tileFactory.generateTile(x, y);
     }
 }

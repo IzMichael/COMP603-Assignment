@@ -2,9 +2,9 @@ package gridhunters.tiles;
 
 import java.util.Random;
 import gridhunters.Enemy;
-import gridhunters.Item;
+import gridhunters.items.Item;
 import gridhunters.Game;
-import gridhunters.GameGUI;
+import gridhunters.ui.GameGUI;
 import gridhunters.items.Artefact;
 import gridhunters.items.Potion;
 
@@ -91,7 +91,8 @@ public class EnemyTile extends Tile {
     public void playerArrive(GameGUI gui) {
         if (!this.isDefeated) {
             gui.setEnemyTile(this);
-            gui.logMessage("Press [F] to initiate combat with the enemy!");
+            game.notifyCombatTriggered(this.getEnemy());
+            gui.logMessage("Combat has been initiated with the enemy!");
         }
     }
 }

@@ -4,7 +4,6 @@
  */
 package gridhunters.items;
 
-import gridhunters.Item;
 import gridhunters.Player;
 
 /**

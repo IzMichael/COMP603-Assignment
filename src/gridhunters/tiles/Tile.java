@@ -1,8 +1,8 @@
 package gridhunters.tiles;
 
-import gridhunters.Item;
+import gridhunters.items.Item;
 import gridhunters.Game;
-import gridhunters.GameGUI;
+import gridhunters.ui.GameGUI;
 import java.io.Serializable;
 
 public abstract class Tile implements Serializable {

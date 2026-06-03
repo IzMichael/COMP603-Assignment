@@ -2,8 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package gridhunters;
+package gridhunters.io;
 
+import gridhunters.Player;
+import gridhunters.tiles.Map;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,7 +20,7 @@ import java.util.Base64;
  */
 public class SaveFile implements Serializable {
 
-    String name;
+    public String name;
     Map map;
     Player player;
 

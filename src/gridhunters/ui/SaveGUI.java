@@ -1,5 +1,7 @@
-package gridhunters;
+package gridhunters.ui;
 
+import gridhunters.SaveDAO;
+import gridhunters.io.SaveFile;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;

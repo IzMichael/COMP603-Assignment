@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class StatusEffect implements Serializable {
 
-    enum Effect {
+    public enum Effect {
         POISON, BURN
     }
 
@@ -37,6 +37,9 @@ public class StatusEffect implements Serializable {
                 creature.health -= 1;
                 logMessage = displayName + " took 1 burn damage.";
             }
+        }
+        if (creature.health <= 0) {
+            creature.health = 0;
         }
         duration--;
         return logMessage;
