@@ -10,72 +10,75 @@ import java.awt.*;
  * @author Michael Martin
  */
 public final class Game implements Serializable {
+
     public Map map;
     public Player player;
     public SaveFile save;
+    private transient SaveDAO saveDAO;
 
     public Game(SaveFile save) throws IOException, ClassNotFoundException {
-        
+        this.saveDAO = new SaveDAO();
         this.save = save;
-        
+
         if (save != null && save.getMap() != null) {
             this.map = save.getMap();
         } else {
             this.map = new Map(this);
             this.save.setMap(this.map);
         }
-        
+
         if (save != null && save.getPlayer() != null) {
             this.player = save.getPlayer();
         } else {
             this.player = createPlayer();
             this.save.setPlayer(this.player);
         }
-        
+
         System.out.println("");
         this.map.getTile(this.player.x, this.player.y).exploreVisual();
-        
+
         this.save();
     }
-    
+
     public void save() throws IOException, ClassNotFoundException {
-        SaveManager sm = new SaveManager();
-        sm.setSave(this.save.name, this.save);
+        saveDAO.saveSave(this.save);
+
         System.out.println("Successfully saved game.");
     }
 
     public Player createPlayer() {
         JPanel panel = new JPanel(new BorderLayout(5, 10));
-        
-        String statSheet = "<html><body style='font-family:sans-serif; padding:5px;'>"
-                + "<h3>Select your character class:</h3>"
-                + "<table border='1' cellpadding='4' cellspacing='0' style='border-color:#555; text-align:center;'>"
-                + "  <tr style='background-color:#333; color:orange;'>"
-                + "    <th>Class</th><th>Vitality</th><th>Strength</th><th>Magic</th><th>Defence</th><th>Agility</th>"
-                + "  </tr>"
-                + "  <tr><td><b>Warrior</b></td><td> </td><td>++++++</td><td>-----</td><td> </td><td> </td></tr>"
-                + "  <tr><td><b>Mage</b></td><td> </td><td>-----</td><td>+++++</td><td> </td><td> </td></tr>"
-                + "  <tr><td><b>Tank</b></td><td>++++++</td><td> </td><td>-----</td><td>+++++</td><td> </td></tr>"
-                + "  <tr><td><b>Rogue</b></td><td>-----</td><td>++++++</td><td> </td><td>-----</td><td>+++++</td></tr>"
-                + "  <tr><td><b>Cleric</b></td><td>++++++</td><td>-----</td><td>+++++</td><td> </td><td>-----</td></tr>"
-                + "</table>"
-                + "</body></html>";
-        
+
+        String statSheet =
+            "<html><body style='font-family:sans-serif; padding:5px;'>" +
+            "<h3>Select your character class:</h3>" +
+            "<table border='1' cellpadding='4' cellspacing='0' style='border-color:#555; text-align:center;'>" +
+            "  <tr style='background-color:#333; color:orange;'>" +
+            "    <th>Class</th><th>Vitality</th><th>Strength</th><th>Magic</th><th>Defence</th><th>Agility</th>" +
+            "  </tr>" +
+            "  <tr><td><b>Warrior</b></td><td> </td><td>++++++</td><td>-----</td><td> </td><td> </td></tr>" +
+            "  <tr><td><b>Mage</b></td><td> </td><td>-----</td><td>+++++</td><td> </td><td> </td></tr>" +
+            "  <tr><td><b>Tank</b></td><td>++++++</td><td> </td><td>-----</td><td>+++++</td><td> </td></tr>" +
+            "  <tr><td><b>Rogue</b></td><td>-----</td><td>++++++</td><td> </td><td>-----</td><td>+++++</td></tr>" +
+            "  <tr><td><b>Cleric</b></td><td>++++++</td><td>-----</td><td>+++++</td><td> </td><td>-----</td></tr>" +
+            "</table>" +
+            "</body></html>";
+
         JLabel lblStats = new JLabel(statSheet);
         panel.add(lblStats, BorderLayout.CENTER);
 
-        String[] options = {"Warrior", "Mage", "Tank", "Rogue", "Cleric"};
-        
+        String[] options = { "Warrior", "Mage", "Tank", "Rogue", "Cleric" };
+
         while (true) {
             int selection = JOptionPane.showOptionDialog(
-                    null, 
-                    panel, 
-                    "Character Class Selection", 
-                    JOptionPane.DEFAULT_OPTION, 
-                    JOptionPane.PLAIN_MESSAGE, 
-                    null, 
-                    options, 
-                    options[0]
+                null,
+                panel,
+                "Character Class Selection",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                options,
+                options[0]
             );
 
             switch (selection) {
@@ -89,13 +92,34 @@ public final class Game implements Serializable {
                     return new Player(this, "Tank", 1.25, 1, 0.25, 1.25, 1);
                 }
                 case 3 -> {
-                    return new Player(this, "Rogue", 0.25, 1.25, 0.25, 0.25, 1.25);
+                    return new Player(
+                        this,
+                        "Rogue",
+                        0.25,
+                        1.25,
+                        0.25,
+                        0.25,
+                        1.25
+                    );
                 }
                 case 4 -> {
-                    return new Player(this, "Cleric", 1.25, 0.25, 0.25, 1, 0.25);
+                    return new Player(
+                        this,
+                        "Cleric",
+                        1.25,
+                        0.25,
+                        0.25,
+                        1,
+                        0.25
+                    );
                 }
                 default -> {
-                    JOptionPane.showMessageDialog(null, "Before you start playing, you must choose a class.", "Selection Required", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(
+                        null,
+                        "Before you start playing, you must choose a class.",
+                        "Selection Required",
+                        JOptionPane.WARNING_MESSAGE
+                    );
                 }
             }
         }

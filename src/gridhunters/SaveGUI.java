@@ -1,14 +1,14 @@
 package gridhunters;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.swing.*;
 
 public class SaveGUI extends JFrame {
 
-    private SaveManager saveManager;
+    private transient SaveDAO saveDAO;
     private SaveFile selectedSave = null;
     private SaveCallback callback;
 
@@ -18,11 +18,16 @@ public class SaveGUI extends JFrame {
 
     public SaveGUI(SaveCallback callback) {
         this.callback = callback;
-        
+
         try {
-            this.saveManager = new SaveManager();
+            this.saveDAO = new SaveDAO();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error loading saves: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                this,
+                "Error loading saves: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            );
             System.exit(1);
         }
 
@@ -33,7 +38,10 @@ public class SaveGUI extends JFrame {
         getContentPane().setBackground(Color.BLACK);
         setLayout(new BorderLayout(10, 10));
 
-        JLabel lblHeader = new JLabel("<html><div style='text-align: center;'>Welcome to GridHunters<br>Select a save file</div></html>", SwingConstants.CENTER);
+        JLabel lblHeader = new JLabel(
+            "<html><div style='text-align: center;'>Welcome to GridHunters<br>Select a save file</div></html>",
+            SwingConstants.CENTER
+        );
         lblHeader.setForeground(Color.ORANGE);
         lblHeader.setFont(new Font("SansSerif", Font.BOLD, 18));
         lblHeader.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
@@ -44,11 +52,14 @@ public class SaveGUI extends JFrame {
         panelSaves.setBackground(new Color(20, 20, 20));
         panelSaves.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        HashMap<String, SaveFile> saves = saveManager.getSaves();
+        HashMap<String, SaveFile> saves = saveDAO.getAllSaves();
         List<String> keys = new ArrayList<>(saves.keySet());
 
         if (keys.isEmpty()) {
-            JLabel lblNoSaves = new JLabel("You have no previous save files.", SwingConstants.CENTER);
+            JLabel lblNoSaves = new JLabel(
+                "You have no previous save files.",
+                SwingConstants.CENTER
+            );
             lblNoSaves.setForeground(Color.LIGHT_GRAY);
             lblNoSaves.setAlignmentX(Component.CENTER_ALIGNMENT);
             panelSaves.add(Box.createVerticalGlue());
@@ -91,9 +102,14 @@ public class SaveGUI extends JFrame {
         btnNewGame.setFocusable(false);
 
         btnNewGame.addActionListener(e -> {
-            String name = JOptionPane.showInputDialog(this, "Please name your save file:", "New Game", JOptionPane.PLAIN_MESSAGE);
+            String name = JOptionPane.showInputDialog(
+                this,
+                "Please name your save file:",
+                "New Game",
+                JOptionPane.PLAIN_MESSAGE
+            );
             if (name != null && !name.trim().isEmpty()) {
-                SaveFile newSave = new SaveFile();
+                SaveFile newSave = new SaveFile(name);
                 newSave.setName(name.trim());
                 this.selectedSave = newSave;
                 finishSelection();
