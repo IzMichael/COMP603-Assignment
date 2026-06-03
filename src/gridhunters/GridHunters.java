@@ -19,7 +19,6 @@ public class GridHunters {
                         GameGUI gui = new GameGUI(game, game.player, game.map);
                         gui.setVisible(true);
                     });
-
                 } catch (ClassNotFoundException | IOException e) {
                     e.printStackTrace();
                 }

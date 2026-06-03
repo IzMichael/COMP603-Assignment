@@ -16,7 +16,7 @@ public abstract class Creature implements Serializable {
     int x;
     int y;
     int maxHealth;
-    int health;
+    public int health;
     ArrayList<StatusEffect> activeEffects = new ArrayList<>();
 
     public void setPosition(int x, int y) {
@@ -36,22 +36,37 @@ public abstract class Creature implements Serializable {
         return this.health;
     }
     
+    public void setHealth(int health) {
+        this.health = health;
+    }
+    
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+    
     public double getHealthPercentage() {
         return (double) this.health / this.maxHealth;
     }
+    
+    public abstract String getName();
     
     public void applyEffect(StatusEffect.Effect effect, int duration) {
         activeEffects.add(new StatusEffect(effect, duration));
     }
     
-    public void processStatusEffects() {
+    public String processStatusEffects() {
+        StringBuilder statusLogs = new StringBuilder();
         var iterator = activeEffects.iterator();
         while (iterator.hasNext()) {
             StatusEffect effect = iterator.next();
-            effect.activateEffect(this);
+            String result = effect.activateEffect(this);
+            if (!result.isEmpty()) {
+                statusLogs.append(result).append("\n");
+            }
             if (effect.getDuration() <= 0) {
                 iterator.remove();
             }
         }
+        return statusLogs.toString();
     }
 }

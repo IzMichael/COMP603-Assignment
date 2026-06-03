@@ -43,6 +43,11 @@ public class Artefact implements Serializable {
     public Artefacts getArtefact() {
         return arte;
     }
+    
+    @Override
+    public String toString() {
+        return getArtefactName();
+    }
 
     public void applyMinimapPassive(Player player) {
         if (this.arte == Artefacts.NATURES_COMPASS || this.arte == Artefacts.SONAR_GOGGLES) {

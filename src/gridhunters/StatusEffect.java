@@ -24,18 +24,22 @@ public class StatusEffect implements Serializable {
         this.duration = duration;
     }
 
-    void activateEffect(Creature creature) {
+    public String activateEffect(Creature creature) {
+        String logMessage = "";
+        String displayName = creature.getName();
+
         switch (effect) {
             case POISON -> {
-                System.out.println(creature.getClass().getSimpleName() + " takes 1 poison damage.");
                 creature.health -= 1;
+                logMessage = displayName + " took 1 poison damage.";
             }
             case BURN -> {
-                System.out.println(creature.getClass().getSimpleName() + " takes 1 burn damage.");
                 creature.health -= 1;
+                logMessage = displayName + " took 1 burn damage.";
             }
         }
         duration--;
+        return logMessage;
     }
 
     public int getDuration() {

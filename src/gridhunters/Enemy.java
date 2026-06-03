@@ -30,39 +30,91 @@ public class Enemy extends Creature {
         this.name = this.generateName();
     }
 
-    public int attack(int strength, Player player) {
+    public String executeEAttack(Player player) {
         Random random = new Random();
-        double multiplier = random.nextDouble(0, 2);
-        int finalDamage = (int) Math.round(strength * multiplier);
+        StringBuilder logText = new StringBuilder();
 
-        // Spirit Staff
+        // Sandstorm Totem
+        if (player.hasArtefact(Artefact.Artefacts.SANDSTORM_TOTEM) && random.nextDouble() < 0.05) {
+            logText.append("The Sandstorm totem has protected you! You 0 hp has been taken from you.");
+            return logText.toString();
+        }
+
+        // Glacial Aegis
+        int currentDefence = player.getDefence();
+        if (player.hasArtefact(Artefact.Artefacts.GLACIAL_AEGIS) && player.getHealthPercentage() <= 0.25) {
+            currentDefence += 5;
+            logText.append("Glacial Aegis triggered! Defense boosted by +5.\n");
+        }
+
+        double enemyAttackMultiplier = random.nextDouble(0, 2); 
+        int calculatedStrength = (int) Math.round(this.strength * enemyAttackMultiplier);
+        
+        int chance = random.nextInt(0, 2);
+        int finalDamage = Math.max(0, (calculatedStrength - currentDefence)) * chance;
+        
+        player.setHealth(player.getHealth() - finalDamage);
+        logText.append(this.name).append(" attacks you for ").append(finalDamage).append(" damage.");
+
+        // Echoing Shard
+        if (player.hasArtefact(Artefact.Artefacts.ECHOING_SHARD) && finalDamage > 0 && random.nextDouble() < 0.15) {
+            int reflected = (int) Math.ceil((double) finalDamage / 2);
+            this.takeDamage(reflected);
+            logText.append("\nEchoing Shard reflected ").append(reflected).append(" damage back!");
+        }
+
+        // Slime Friend
+        if (player.hasArtefact(Artefact.Artefacts.SLIME_FRIEND) && finalDamage > 0 && random.nextDouble() < 0.15) {
+            int reflected = (int) Math.ceil((double) finalDamage / 2);
+            this.takeDamage(reflected);
+            logText.append("\nGoopy (your slime friend) attacked and did ").append(reflected).append(" damage!");
+        }
+
+        return logText.toString();
+    }
+    
+    public String executePAttack(int playerStrength, Player player) {
+        Random random = new Random();
+        StringBuilder logText = new StringBuilder();
+        
+        double multiplier = random.nextDouble(0, 2);
+        int finalDamage = (int) Math.round(playerStrength * multiplier);
+
+        // 1. Spirit Staff
         if (player.hasArtefact(Artefact.Artefacts.SPIRIT_STAFF) && random.nextDouble() < 0.15) {
-            System.out.println("Your Spirit Staff has summoned a spirit to assist in your attack.");
+            logText.append("Your Spirit Staff has summoned a spirit to assist in your attack.\n");
             finalDamage += finalDamage * 1.15;
         }
 
-        // Frozen Heart
+        // 2. Frozen Heart
         if (player.hasArtefact(Artefact.Artefacts.FROZEN_HEART) && player.getHealthPercentage() >= 0.75) {
-            System.out.println("Your Frozen Heart has activated.");
+            logText.append("Your Frozen Heart has activated.\n");
             finalDamage += 5;
         }
 
-        // Venomous Fang
+        // 3. Venomous Fang
         if (player.hasArtefact(Artefact.Artefacts.VENOMOUS_FANG) && random.nextDouble() < 0.1) {
-            System.out.println("Venomous Fang has poisoned the enemy.");
-            applyEffect(StatusEffect.Effect.POISON, 3);
+            logText.append("Venomous Fang has poisoned the enemy.\n");
+            this.applyEffect(StatusEffect.Effect.POISON, 3);
         }
 
-        // Sun Pendant
+        // 4. Sun Pendant
         if (player.hasArtefact(Artefact.Artefacts.SUN_PENDANT) && random.nextDouble() < 0.1) {
-            System.out.println("Sun Pendant has burned the enemy.");
-            applyEffect(StatusEffect.Effect.BURN, 3);
+            logText.append("Sun Pendant has burned the enemy.\n");
+            this.applyEffect(StatusEffect.Effect.BURN, 3);
         }
 
         this.health -= finalDamage;
-        return finalDamage;
-    }
+        if (this.health < 0) this.health = 0;
 
+        if (finalDamage < 1) {
+                logText.append("Your attack was ineffective! No damage was dealt to the " + this.getName() + ".");
+            } else {
+                logText.append("You struck the enemy for " + finalDamage + " damage.");
+            }
+        return logText.toString();
+    }
+    
     public void takeDamage(int damage) {
         this.health -= damage;
         if (this.health < 0) {
@@ -73,7 +125,8 @@ public class Enemy extends Creature {
     public int getAttack() {
         return this.strength;
     }
-
+    
+    @Override
     public String getName() {
         return this.name;
     }
@@ -126,7 +179,7 @@ public class Enemy extends Creature {
                 return "Strixie, The Spectral Huntress";
             }
             case 1 -> {
-                return "Adamas, The Iron Pulse Shard-Titan";
+                return "Ruruna, The Sonic-Winged Queen";
             }
             case 2 -> {
                 return "Tokui, The Draconic Gastropod";
