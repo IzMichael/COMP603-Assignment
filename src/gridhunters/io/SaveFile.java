@@ -24,11 +24,10 @@ public class SaveFile implements Serializable {
     Map map;
     Player player;
 
-    public SaveFile(String profileName, String serialized) throws IOException, ClassNotFoundException {
-        String[] parts = serialized.split(";-;");
-        this.name = profileName;
-        this.map = (Map) SaveFile.deserialize(parts[0]);
-        this.player = (Player) SaveFile.deserialize(parts[1]);
+    public SaveFile(String name, String mapSerial, String playerSerial) throws IOException, ClassNotFoundException {
+        this.name = name;
+        this.map = (Map) SaveFile.deserialize(mapSerial);
+        this.player = (Player) SaveFile.deserialize(playerSerial);
     }
 
     public SaveFile(String name, Map map, Player player) {
@@ -37,19 +36,8 @@ public class SaveFile implements Serializable {
         this.player = player;
     }
 
-    public SaveFile() {
-    }
-
-    @Override
-    public String toString() {
-        String mapSerial = "", playerSerial = "";
-        try {
-            mapSerial = SaveFile.serialize(this.map);
-            playerSerial = SaveFile.serialize(this.player);
-        } catch (IOException ex) {
-            System.getLogger(SaveFile.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
-        return mapSerial + ";-;" + playerSerial;
+    public SaveFile(String name) {
+        this.name = name;
     }
 
     public String getName() {
@@ -64,6 +52,10 @@ public class SaveFile implements Serializable {
         return this.map;
     }
 
+    public String getSerializedMap() throws IOException {
+        return SaveFile.serialize(this.map);
+    }
+
     public void setMap(Map map) {
         this.map = map;
     }
@@ -72,12 +64,15 @@ public class SaveFile implements Serializable {
         return this.player;
     }
 
+    public String getSerializedPlayer() throws IOException {
+        return SaveFile.serialize(this.player);
+    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
 
-    private static Object deserialize(String s) throws IOException,
-            ClassNotFoundException {
+    private static Object deserialize(String s) throws IOException, ClassNotFoundException {
         byte[] data = Base64.getDecoder().decode(s);
         Object o;
         try (ObjectInputStream ois = new ObjectInputStream(
