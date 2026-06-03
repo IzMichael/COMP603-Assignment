@@ -16,7 +16,7 @@ import java.util.Scanner;
  */
 public class Player extends Creature {
 
-    Game game;
+    transient Game game;
 
     private String name;
     private boolean alive;

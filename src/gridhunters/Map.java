@@ -20,7 +20,7 @@ import java.io.Serializable;
 public class Map implements Serializable {
 
     HashMap<String, Tile> tiles = new HashMap<>();
-    Game game;
+    transient Game game;
     int maxViewRadius = 3;
 
     public Map(Game game) {
