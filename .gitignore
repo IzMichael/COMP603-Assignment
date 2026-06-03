@@ -1,5 +1,6 @@
 # Save Data
 resources/savedata.txt
+GridHuntersDB
 
 # NetBeans
 nbproject/private/
@@ -15,3 +16,9 @@ nb-configuration.xml
 *.jar
 *.war
 *.ear
+
+# Exception for Derby Library
+!derby.jar
+
+# Logs
+derby.log
