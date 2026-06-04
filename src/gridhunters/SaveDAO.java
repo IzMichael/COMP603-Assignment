@@ -91,7 +91,7 @@ public class SaveDAO implements SaveDAOInterface {
         try {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM savefiles WHERE name = ?");
             statement.setString(1, save.getName());
-            statement.executeQuery();
+            statement.executeUpdate();
         } catch (SQLException ex) {
             System.getLogger(SaveDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
