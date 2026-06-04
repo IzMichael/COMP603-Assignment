@@ -73,6 +73,7 @@ public class SaveFile implements Serializable {
     }
 
     private static Object deserialize(String s) throws IOException, ClassNotFoundException {
+        if (s.equals("")) return null;
         byte[] data = Base64.getDecoder().decode(s);
         Object o;
         try (ObjectInputStream ois = new ObjectInputStream(
