@@ -47,7 +47,7 @@ public class SaveDAO implements SaveDAOInterface {
     @Override
     public SaveFile getSaveByName(String name) {
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM savefiles WHERE name = ? LIMIT 1", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM savefiles WHERE name = ?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             statement.setString(1, name);
             ResultSet results = statement.executeQuery();
             if (!results.isBeforeFirst()) return null;
