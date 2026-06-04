@@ -5,6 +5,7 @@ import gridhunters.Game;
 import gridhunters.items.Item;
 import gridhunters.tiles.Map;
 import gridhunters.Player;
+import gridhunters.items.Artefact;
 import gridhunters.patterns.CombatMediator;
 import gridhunters.patterns.GameObserver;
 import gridhunters.tiles.EnemyTile;
@@ -359,8 +360,14 @@ public class GameGUI extends JFrame implements GameObserver {
     private boolean checkCombatEnd(Enemy enemy) {
         if (enemy.getHealth() <= 0) {
             logMessage("You won! The " + enemy.getName() + " has been defeated, and you emerge victorious!\n");
-            Item drop = currentEnemyTile.claimDrops();
-            if (drop != null) {
+            
+            if (currentEnemyTile.isBoss()) {
+                Artefact drop = currentEnemyTile.claimBossDrops();
+                if (drop != null) {
+                    logMessage("It dropped a legendary artefact, " + drop + ", which you have picked up.\n");
+                }
+            } else {
+                Item drop = currentEnemyTile.claimDrops();
                 player.addItem(drop);
                 logMessage("It dropped a " + drop + ", which you have picked up.\n");
             }
@@ -459,7 +466,11 @@ public class GameGUI extends JFrame implements GameObserver {
 
     private void handleKeyboardDirection(int keyCode) {
         if (player == null || map == null) return;
-        if (currentEnemyTile != null && !currentEnemyTile.isDefeated()) return;
+        
+        if (currentEnemyTile != null && !currentEnemyTile.isDefeated()) {
+            logMessage("You cannot walk away! Finish the fight or use 'Attempt Flee'.");
+            return; 
+        }
 
         int targetX = player.getX();
         int targetY = player.getY();
@@ -475,6 +486,13 @@ public class GameGUI extends JFrame implements GameObserver {
         }
 
         Tile targetTile = map.getTile(targetX, targetY);
+        
+        if (currentEnemyTile != null && !currentEnemyTile.isDefeated()) {
+            cardLayout.show(panelMain, "COMBAT_VIEW");
+            targetTile.playerArrive(this);
+            return;
+        }
+        
         if (targetTile != null) {
             player.x = targetX;
             player.y = targetY;

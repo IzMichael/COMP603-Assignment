@@ -49,21 +49,22 @@ public class EnemyTile extends Tile {
 
     public Item claimDrops() {
         this.isDefeated = true;
-        if (this.isBoss) {
-            Artefact drop = new Artefact();
-            this.game.player.addArtefact(drop);
-            if (this.game.player.hasArtefact(Artefact.Artefacts.NATURES_COMPASS) || this.game.player.hasArtefact(Artefact.Artefacts.SONAR_GOGGLES)) {
-                this.game.player.setMapRadius(3);
-            }
-            return null; 
+        Random r = new Random();
+        if (r.nextInt(2) == 0) {
+            return new Potion(Potion.potionType.HEALTH);
         } else {
-            Random r = new Random();
-            if (r.nextInt(2) == 0) {
-                return new Potion(Potion.potionType.HEALTH);
-            } else {
-                return new Item();
-            }
+            return new Item();
         }
+    }
+    
+    public Artefact claimBossDrops() {
+        this.isDefeated = true;
+        Artefact drop = new Artefact();
+        this.game.player.addArtefact(drop);
+        if (this.game.player.hasArtefact(Artefact.Artefacts.NATURES_COMPASS) || this.game.player.hasArtefact(Artefact.Artefacts.SONAR_GOGGLES)) {
+            this.game.player.setMapRadius(3);
+        }
+        return drop; 
     }
 
     @Override
@@ -92,6 +93,9 @@ public class EnemyTile extends Tile {
         if (!this.isDefeated) {
             gui.setEnemyTile(this);
             game.notifyCombatTriggered(this.getEnemy());
+            if (this.getEnemy() != null) {
+                gui.onCombatTriggered(this.getEnemy());
+            }
             gui.logMessage("Combat has been initiated with the enemy!");
         }
     }
