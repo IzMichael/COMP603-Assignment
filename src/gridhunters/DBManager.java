@@ -10,6 +10,8 @@ import org.apache.derby.jdbc.EmbeddedDriver;
  * @author Michael Martin
  */
 public class DBManager {
+    private static DBManager singleton = null;
+    
     String url = "jdbc:derby:GridHuntersDB; create=true";
     String username = "gridhunters";
     String password = "gridhunters";
@@ -42,5 +44,17 @@ public class DBManager {
         if (connection != null) {
             connection.close();
         }
+    }
+    
+    public static synchronized DBManager getInstance() {
+        if (singleton == null) {
+            try {
+                singleton = new DBManager();
+            } catch (SQLException ex) {
+                System.getLogger(DBManager.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        }
+
+        return singleton;
     }
 }

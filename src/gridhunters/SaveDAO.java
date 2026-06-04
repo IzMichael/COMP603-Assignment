@@ -21,11 +21,7 @@ public class SaveDAO implements SaveDAOInterface {
     Connection connection;
 
     public SaveDAO() {
-        try {
-            connection = new DBManager().getConnection();
-        } catch (SQLException ex) {
-            System.getLogger(SaveDAO.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
+        connection = DBManager.getInstance().getConnection();
     }
 
     @Override
