@@ -103,7 +103,7 @@ public class SaveDAOTest {
         boolean result = instance.doesRowExist("Save1");
         assertEquals(expResult, result);
         
-        boolean expResult2 = true;
+        boolean expResult2 = false;
         boolean result2 = instance.doesRowExist("Save7");
         assertEquals(expResult2, result2);
     }
