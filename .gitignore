@@ -19,6 +19,12 @@ nb-configuration.xml
 
 # Exception for Derby Library
 !derby.jar
+!derbyclient.jar
+!derbynet.jar
+!derbyoptionaltools.jar
+!derbyrun.jar
+!derbyshared.jar
+!derbytools.jar
 
 # Logs
 derby.log
