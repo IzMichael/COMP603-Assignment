@@ -19,7 +19,7 @@ import java.util.Base64;
  * @author Michael Martin
  */
 public class SaveFile implements Serializable {
-
+    private static final long serialVersionUID = 6529685098267757690L;
     public String name;
     Map map;
     Player player;
