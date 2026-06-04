@@ -43,9 +43,4 @@ public class DBManager {
             connection.close();
         }
     }
-
-    public void main(String[] args) throws SQLException {
-        DBManager dbManager = new DBManager();
-        System.out.println(dbManager.getConnection());
-    }
 }
