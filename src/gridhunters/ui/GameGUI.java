@@ -168,7 +168,7 @@ public class GameGUI extends JFrame implements GameObserver {
             btnInventory[i].setFocusable(false);
             btnInventory[i].addActionListener(e -> {
                 if (player != null) {
-                    player.useItem(slotIndex);
+                    player.useItem(slotIndex, this);
                     updateHPAndInventory();
                 }
             });

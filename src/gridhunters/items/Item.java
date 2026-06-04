@@ -9,6 +9,7 @@ package gridhunters.items;
  * @author LD Mao
  */
 import gridhunters.Player;
+import gridhunters.ui.GameGUI;
 import java.io.Serializable;
 import java.util.Random;
 
@@ -86,7 +87,7 @@ public class Item implements Serializable {
         return this.name;
     }
 
-    public boolean use(Player p) {
+    public boolean use(Player p, GameGUI gui) {
         return false;
     }
 

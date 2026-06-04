@@ -5,6 +5,7 @@
 package gridhunters.items;
 
 import gridhunters.Player;
+import gridhunters.ui.GameGUI;
 
 /**
  *
@@ -33,10 +34,10 @@ public class Potion extends Item {
     }
 
     @Override
-    public boolean use(Player p) {
+    public boolean use(Player p, GameGUI gui) {
         if (this.pot == potionType.HEALTH) {
             p.heal(this.statBonus);
-            System.out.println("You drank the " + this.name + " and healed " + this.statBonus + "hp.");
+            gui.logMessage("You drank the " + this.name + " and healed " + this.statBonus + "hp.");
             return true;
         }
         return false;

@@ -8,6 +8,7 @@ import gridhunters.items.Item;
 import gridhunters.items.Item.Equipment;
 import java.util.ArrayList;
 import gridhunters.items.Artefact;
+import gridhunters.ui.GameGUI;
 
 /**
  *
@@ -184,13 +185,12 @@ public class Player extends Creature {
         }
     }
 
-    public void useItem(int slot) {
-        if (slot >= 0 && slot < inventorySize) {
-            Item item = inventory.get(slot);
-            if (item == null) return;
-            boolean consumed = item.use(this);
-            if (consumed) {
-                inventory.set(slot, null);
+    public void useItem(int slotIndex, GameGUI gui) {
+        Item item = this.inventory.get(slotIndex);
+        if (item != null) {
+            boolean used = item.use(this, gui); 
+            if (used && item.isConsumable()) {
+                this.inventory.remove(slotIndex);
             }
         }
     }
