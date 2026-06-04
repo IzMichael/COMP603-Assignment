@@ -98,7 +98,7 @@ public class SaveGUI extends JFrame {
 
         JButton btnNewGame = new JButton("[+] Create New Save File");
         btnNewGame.setPreferredSize(new Dimension(250, 40));
-        btnNewGame.setBackground(Color.GREEN);
+        btnNewGame.setBackground(new Color(68, 207, 108));
         btnNewGame.setForeground(Color.WHITE);
         btnNewGame.setFont(new Font("SansSerif", Font.BOLD, 13));
         btnNewGame.setFocusable(false);
