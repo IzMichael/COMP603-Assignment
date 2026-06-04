@@ -16,7 +16,7 @@ import java.util.HashMap;
  *
  * @author Michael Martin
  */
-public class SaveDAO {
+public class SaveDAO implements SaveDAOInterface {
 
     Connection connection;
 
@@ -28,6 +28,7 @@ public class SaveDAO {
         }
     }
 
+    @Override
     public HashMap<String, SaveFile> getAllSaves() {
         HashMap<String, SaveFile> saves = new HashMap<>();
         try {
@@ -47,6 +48,7 @@ public class SaveDAO {
         return saves;
     }
 
+    @Override
     public SaveFile getSaveByName(String name) {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM savefiles WHERE name = ? LIMIT 1", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -64,6 +66,7 @@ public class SaveDAO {
         return null;
     }
 
+    @Override
     public void saveSave(SaveFile save) {
         try {
             PreparedStatement statement;
@@ -83,6 +86,7 @@ public class SaveDAO {
         }
     }
 
+    @Override
     public void deleteSave(SaveFile save) {
         try {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM savefiles WHERE name = ?");
@@ -93,6 +97,7 @@ public class SaveDAO {
         }
     }
 
+    @Override
     public boolean doesRowExist(String name) {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM savefiles WHERE name = ?", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
