@@ -1,4 +1,4 @@
-package gridhunters;
+package gridhunters.io;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

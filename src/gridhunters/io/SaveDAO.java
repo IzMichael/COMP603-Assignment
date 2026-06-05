@@ -1,4 +1,4 @@
-package gridhunters;
+package gridhunters.io;
 
 import gridhunters.io.SaveFile;
 import java.io.IOException;

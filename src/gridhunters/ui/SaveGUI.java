@@ -1,6 +1,6 @@
 package gridhunters.ui;
 
-import gridhunters.SaveDAO;
+import gridhunters.io.SaveDAO;
 import gridhunters.io.SaveFile;
 import java.awt.*;
 import java.util.ArrayList;

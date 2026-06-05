@@ -1,5 +1,6 @@
 package gridhunters;
 
+import gridhunters.io.SaveDAO;
 import gridhunters.io.SaveFile;
 import gridhunters.patterns.GameObserver;
 import gridhunters.tiles.Map;
