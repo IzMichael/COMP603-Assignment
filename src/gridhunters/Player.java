@@ -5,7 +5,6 @@
 package gridhunters;
 
 import gridhunters.items.Item;
-import gridhunters.items.Item.Equipment;
 import java.util.ArrayList;
 import gridhunters.items.Artefact;
 import gridhunters.ui.GameGUI;
@@ -67,7 +66,7 @@ public class Player extends Creature {
     }
 
     @Override
-    public int getHealth() {
+    public int getMaxHealth() {
         int modifier = 0;
         if (this.chestplate != null) {
             modifier += this.chestplate.statBonus;
@@ -75,7 +74,7 @@ public class Player extends Creature {
         if (this.leggings != null) {
             modifier += this.leggings.statBonus;
         }
-        return this.health + modifier;
+        return this.maxHealth + modifier;
     }
 
     public int getMeleeAttack() {
@@ -190,7 +189,7 @@ public class Player extends Creature {
         if (item != null) {
             boolean used = item.use(this, gui); 
             if (used && item.isConsumable()) {
-                this.inventory.remove(slotIndex);
+                this.inventory.set(slotIndex, null);
             }
         }
     }

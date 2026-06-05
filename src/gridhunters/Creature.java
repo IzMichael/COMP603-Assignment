@@ -37,11 +37,14 @@ public abstract class Creature implements Serializable {
     }
     
     public void setHealth(int health) {
+        if (this.health >= this.maxHealth) {
+            this.health = this.maxHealth;
+        }
         this.health = health;
     }
     
     public int getMaxHealth() {
-        return maxHealth;
+        return this.maxHealth;
     }
     
     public double getHealthPercentage() {

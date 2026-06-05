@@ -54,9 +54,9 @@ public class CombatMediator {
         }
 
         if (finalDamage < 1) {
-                logText.append("Your attack was ineffective! No damage was dealt to the " + enemy.getName() + ".");
+                logText.append("Your attack was ineffective! No damage was dealt to the " + enemy.getName() + ".\n");
             } else {
-                logText.append("You struck the enemy for " + finalDamage + " damage.");
+                logText.append("You struck the enemy for " + finalDamage + " damage.\n");
             }
         return logText.toString();
     }
@@ -67,7 +67,7 @@ public class CombatMediator {
 
         // Sandstorm Totem
         if (player.hasArtefact(Artefact.Artefacts.SANDSTORM_TOTEM) && random.nextDouble() < 0.05) {
-            logText.append("The Sandstorm totem has protected you! You 0 hp has been taken from you.");
+            logText.append("The Sandstorm totem has protected you! You 0 hp has been taken from you.\n");
             return logText.toString();
         }
 
@@ -85,20 +85,20 @@ public class CombatMediator {
         int finalDamage = Math.max(0, (calculatedStrength - currentDefence)) * chance;
         
         player.setHealth(player.getHealth() - finalDamage);
-        logText.append(enemy.getName()).append(" attacks you for ").append(finalDamage).append(" damage.");
+        logText.append(enemy.getName()).append(" attacks you for ").append(finalDamage).append(" damage.\n");
 
         // Echoing Shard
         if (player.hasArtefact(Artefact.Artefacts.ECHOING_SHARD) && finalDamage > 0 && random.nextDouble() < 0.15) {
             int reflected = (int) Math.ceil((double) finalDamage / 2);
             enemy.takeDamage(reflected);
-            logText.append("\nEchoing Shard reflected ").append(reflected).append(" damage back!");
+            logText.append("Echoing Shard reflected ").append(reflected).append(" damage back!\n");
         }
 
         // Slime Friend
         if (player.hasArtefact(Artefact.Artefacts.SLIME_FRIEND) && finalDamage > 0 && random.nextDouble() < 0.15) {
             int reflected = (int) Math.ceil((double) finalDamage / 2);
             enemy.takeDamage(reflected);
-            logText.append("\nGoopy (your slime friend) attacked and did ").append(reflected).append(" damage!");
+            logText.append("\nGoopy (your slime friend) attacked and did ").append(reflected).append(" damage!\n");
         }
 
         return logText.toString();

@@ -124,7 +124,7 @@ public class GameGUI extends JFrame implements GameObserver {
         cardLayout.show(panelMain, "MAP_VIEW");
         updateHPAndInventory();
         refreshMapPanel();
-        logMessage("Cross tiles via WASD. Fight enemies via F. Loot treasure via R.");
+        logMessage("Cross tiles via WASD. Loot treasure via R.");
     }
 
     private JPanel createSidebarPanel() {
@@ -416,7 +416,7 @@ public class GameGUI extends JFrame implements GameObserver {
                         default -> player.swapItem(itemInChest);
                     };
                     chestItems.set(index, returnedFromInventory);
-                    logMessage("Swapped items with the chest container.");
+                    logMessage("Swapped items with the chest container.\n");
                     refreshLootPanel();
                     updateHPAndInventory();
                 }
@@ -441,7 +441,7 @@ public class GameGUI extends JFrame implements GameObserver {
         if (player == null) return;
 
         labelClass.setText("Name: " + player.getName() + " | Class: " + player.getClassType());
-        labelHP.setText("HP: " + player.getHealth() + " / " + player.maxHealth);
+        labelHP.setText("HP: " + player.getHealth() + " / " + player.getMaxHealth());
 
         labelHelmet.setText("Helmet: " + getEquipmentName(player.helmet));
         labelChestplate.setText("Chestplate: " + getEquipmentName(player.chestplate));
@@ -577,7 +577,7 @@ public class GameGUI extends JFrame implements GameObserver {
     public void onLootDiscovered(List<Item> items) {
         refreshLootPanel();
         cardLayout.show(panelMain, "LOOT_VIEW");
-        logMessage("You look inside the container...");
+        logMessage("You look inside the container...\n");
     }
 
     @Override
